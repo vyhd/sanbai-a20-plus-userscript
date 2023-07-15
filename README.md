@@ -16,6 +16,9 @@ Contributions are welcome! I don't have grand ambitions with this script, but if
 
 # Changelog
 
+### 1.0.3 (2023/07/14)
+caught up on Golden League A3 chart revocations
+
 ### 1.0.2 (2023/04/10)
 explicitly added CC0 license - author intends that to apply to 0.9.0 thru 1.0.2
 
