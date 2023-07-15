@@ -11,17 +11,6 @@
 // @updateURL    https://gist.githubusercontent.com/vyhd/4fcf641bf91eed55d5bcd9d758cd453f/raw
 // ==/UserScript==
 
-/**
- * Changelog
- * 1.0.2, 2023/04/10: explicitly added CC0 license - author intends that to apply to 0.9.0 thru 1.0.2
- * 1.0.1, 2023/04/04: unsuppress KAC exclusive (since at least some MDX:U players can play it)
- * 1.0.0, 2023/04/03: declared this Good Enough For Release™
- * 0.9.3, 2023/04/03: suppress KAC exclusive, fixed a couple missing songs from below
- * 0.9.2, 2023/04/03: added gist URL, suppress A3 challenge charts/Asia licenses/gold cab exclusives
- * 0.9.1, 2023/04/02: Fixed GOLDEN LEAGUE Challenge charts from A3 still appearing
- * 0.9.0: 2023/04/02: Initially released version
- */
-
 // borrow their jQuery so we don't need to pull in another - 1.11.1 as of this writing
 let $ = window.jQuery;
 
