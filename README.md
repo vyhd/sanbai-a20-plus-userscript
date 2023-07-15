@@ -16,6 +16,9 @@ Contributions are welcome! I don't have grand ambitions with this script, but if
 
 # Changelog
 
+### 2.0.0 (2023/07/14)
+moved from a Gist to a proper GitHub repo! _Please re-sync your script with the updated @updateURL/@downloadURL directives to continue getting updates._
+
 ### 1.0.3 (2023/07/14)
 caught up on Golden League A3 chart revocations
 

@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         3icecream - only MDX:U songs
 // @namespace    https://vyhd.dev
-// @version      1.0.3
+// @version      2.0.0
 // @description  Removes songs from 3icecream's tier lists that are unavailable on MDX:U (A20 PLUS, white) cabs.
 // @license      CC0-1.0; https://creativecommons.org/publicdomain/zero/1.0/
 // @author       vyhd@vyhd.dev
 // @match        https://3icecream.com/difficulty_list/*
 // @grant        none
-// @downloadURL  https://gist.githubusercontent.com/vyhd/4fcf641bf91eed55d5bcd9d758cd453f/raw
-// @updateURL    https://gist.githubusercontent.com/vyhd/4fcf641bf91eed55d5bcd9d758cd453f/raw
+// @downloadURL  https://raw.githubusercontent.com/vyhd/sanbai-a20-plus-userscript/release/script.js
+// @updateURL    https://raw.githubusercontent.com/vyhd/sanbai-a20-plus-userscript/release/script.js
+// @supportURL   https://github.com/vyhd/sanbai-a20-plus-userscript
 // ==/UserScript==
 
 // borrow their jQuery so we don't need to pull in another - 1.11.1 as of this writing
