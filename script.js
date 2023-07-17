@@ -112,6 +112,9 @@ class A3ContentController {
 
         this.elementsToToggle = new Array();
 
+        // Manually include the "Insufficient Data" row: all A20 PLUS content is ranked, so don't render an empty row
+        this.elementsToToggle.push($("#no-rating-row"));
+
         // ALL_SONG_DATA contains an array of song data structured like {song_id, song_name, version_num}, etc:
         // Find all the song jackets that map to DDR A3 (version_num === 19) for toggling.
         let newSongs = songData.filter(e => e.version_num == 19);
@@ -164,7 +167,4 @@ class A3ContentController {
     // Install the A3 toggle button under the "What's this list?" link in the top right
     let link = document.querySelector("#explanation")
     link.parentNode.insertBefore(button, link.nextSibling);
-
-    // always hide the 'Insufficient Data' row for cleanliness - iirc, A20 PLUS songs are all ranked
-    $("#no-rating-row").hide();
 })();
