@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         3icecream difficulty_list - only MDX:U songs
 // @namespace    https://vyhd.dev
-// @version      2.0.0
+// @version      2.1.0
 // @description  Removes songs from 3icecream's tier lists that are unavailable on MDX:U (A20 PLUS, white) cabs.
 // @license      CC0-1.0; https://creativecommons.org/publicdomain/zero/1.0/
 // @author       vyhd@vyhd.dev

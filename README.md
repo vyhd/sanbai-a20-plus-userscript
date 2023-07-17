@@ -16,6 +16,9 @@ Contributions are welcome! I don't have grand ambitions with this script, but if
 
 # Changelog
 
+### 2.1.0 (2023/07/16)
+added button to enable toggling A3 content on demand (contributed by [@robert-vo](https://github.com/robert-vo) - thanks!)
+
 ### 2.0.0 (2023/07/14)
 moved from a Gist to a proper GitHub repo! _Please re-sync your script with the updated @updateURL/@downloadURL directives to continue getting updates._
 
