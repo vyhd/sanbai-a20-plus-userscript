@@ -12,7 +12,9 @@
 // @supportURL   https://github.com/vyhd/sanbai-a20-plus-userscript
 // ==/UserScript==
 
-// borrow their jQuery so we don't need to pull in another - 1.11.1 as of this writing
+'use strict';
+
+// borrow Sanbai's jQuery instance so we don't need to pull in another - 1.11.1 as of this writing
 let $ = window.jQuery;
 
 const LOCKED_CHART_TYPES = new Set([
@@ -20,9 +22,9 @@ const LOCKED_CHART_TYPES = new Set([
     190, // GRAND PRIX charts only in A3
 ]);
 
-const CSP_AND_CDP = [4,8]; // many songs have A3 challenge charts we want to hide - see hideSong for more context
+const CSP_AND_CDP = [4,8]; // many songs have A3 challenge charts we want to hide
 
-// quick-and-dirty hack for A3's challenge charts and friends: remove these IDs and difficulties too.
+// quick-and-dirty hack for A3's challenge charts and friends: index these IDs and difficulties too.
 // (get a song's ID by name via: `ALL_SONG_DATA.filter(e => e.song_name === "foo").map(e => e.song_id)`
 const MANUAL_REVOCATION_LIST = [
     // GOLDEN LEAGUE A3 Challenge charts
@@ -38,7 +40,6 @@ const MANUAL_REVOCATION_LIST = [
     {song_id: "Ol8PPooqO8iOqQ6900o0q0QI9dPo0O0b", difficulties: CSP_AND_CDP }, // Rampage Hero
     {song_id: "bbiPqbo0lQq9P19i06q690blI91dbbq6", difficulties: CSP_AND_CDP }, // Starlight in the Snow
     {song_id: "b80qOO6l8060990qQPod1bOd8Q9d69qo", difficulties: CSP_AND_CDP }, // The World Ends Now
-
 
     // other A3 Challenge charts
     {song_id: "o9P816l0QQ1b9l1l6i1o6OD9bl9dP00l", difficulties: CSP_AND_CDP }, // BITTER CHOCOLATE STRIKER
@@ -93,88 +94,77 @@ const MANUAL_REVOCATION_LIST = [
     {song_id: "D6b8boIiOqQOq1QP9D1qd08I6Q0IIqq9"}, // 雑草魂なめんなよ！
 ]
 
-function debug(logLine) {
-//    console.debug(logLine);
-}
-
-var hideUnavailableSongs = true;
-
-/**
- * Builds a jQuery selector to find this song's jacket(s), then hides all matches.
- * `difficulty_id`, is optional and goes from 0-8: 0-4 are bSP thru CSP, 5-8 are BDP thru CSP.
+/*
+ * Finds all song jackets that belong to A3-locked content and caches them to be toggled on demand via `.toggle()`.
  */
-function toggleSongVisibility(song_id, difficulty_id) {
-    debug(`Removing ${window.ALL_SONG_DATA.find(e => e.song_id === song_id).song_name}, difficulty ${difficulty_id}`);
+class A3ContentController {
+    toggle() {
+        for (const element of this.elementsToToggle) {
+            $(element).toggle();
+        }
+    }
 
-    let selector = (difficulty_id)
-        ? `#div-jacket-${song_id}-${difficulty_id}` // exact match a chart by ID
-        : `div[id^=div-jacket-${song_id}]`; // prefix match all charts
+    constructor(songData) {
+        // jQuery selectors to find all charts for a song, or a single chart if its difficulty is given.
+        // `difficulty_id` must be between 0 and 8: values 0-4 are bSP thru CSP, 5-8 are BDP thru CDP.
+        let SELECT_BY_SONG_ID = (song_id) => $(`div[id^=div-jacket-${song_id}]`);
+        let SELECT_BY_SONG_AND_DIFFICULTY_ID = (song_id, difficulty_id) => $(`#div-jacket-${song_id}-${difficulty_id}`);
 
-    if (hideUnavailableSongs) {
-        $(selector).hide();
-    } else {
-        $(selector).show();
+        this.elementsToToggle = new Array();
+
+        // ALL_SONG_DATA contains an array of song data structured like {song_id, song_name, version_num}, etc:
+        // Find all the song jackets that map to DDR A3 (version_num === 19) for toggling.
+        let newSongs = songData.filter(e => e.version_num == 19);
+        this.elementsToToggle.push(...newSongs.map(e => SELECT_BY_SONG_ID(e.song_id)).flat());
+
+        // Next, find charts that are unavailable for regular play on A20 PLUS and have `lock_types` that say so.
+        // `lock_types` is an array mapped by `difficulty_id`, e.g. [0, 0, 0, 0, 190, 0, 0, 0, 190] for locked CSP/CDP charts.
+        let songsWithLockedCharts = songData.filter(e => e.version_num <= 18 && Object.hasOwn(e, 'lock_types'));
+        songsWithLockedCharts.forEach(e => {
+            e.lock_types.forEach((lock_value, difficulty_id) => {
+                if (LOCKED_CHART_TYPES.has(lock_value)) {
+                    this.elementsToToggle.push(SELECT_BY_SONG_AND_DIFFICULTY_ID(e.song_id, difficulty_id));
+                }
+            })
+        });
+
+        // Finally, apply the manual revocation list to cover all cases we couldn't programmatically cover above.
+        MANUAL_REVOCATION_LIST.forEach(e => {
+            let selection = (e.difficulties)
+                ? e.difficulties.map(d => SELECT_BY_SONG_AND_DIFFICULTY_ID(e.song_id, d))
+                : SELECT_BY_SONG_ID(e.song_id);
+
+            // Weirdly, empty jQuery selectors return "not iterable" with the spread operator, so we hoof it here.
+            Array.prototype.push.apply(this.elementsToToggle, selection);
+        });
     }
 }
 
 (function() {
-    'use strict';
+    // Hide A3 content by default
+    let a3ContentController = new A3ContentController(window.ALL_SONG_DATA);
+    a3ContentController.toggle();
 
-    var a3ToggleId = 'a3Toggle';
-    var showSongsText = 'Show MDX:U';
-    var hideSongsText = 'Hide MDX:U';
+    // Create a toggle button for A3 content
+    const hideText = "Hide A3 Charts";
+    const showText = "Show A3 Charts";
 
-    function toggleAllSongVisibility() {
-        /*
-         * ALL_SONG_DATA contains an array of song data structured like {song_id, song_name, version_num}, etc:
-         * pick out all the song IDs that map to DDR A3 (version_num === 19) and remove their icons from the page.
-         */
-        let songsToRemove = window.ALL_SONG_DATA.filter(e => e.version_num == 19);
-        songsToRemove.forEach(e => toggleSongVisibility(e.song_id));
+    const button = document.createElement('div');
+    button.setAttribute('class', 'div-options-btn');
+    button.setAttribute('id', 'toggle-a3-content');
 
-        /*
-         * Now, take one more pass through to remove charts that are locked (or missing) in A20 PLUS.
-         * (Not sure what the `lock_types` means here, but we can guess what values should be filtered.)
-         */
-        let songsToCheck = window.ALL_SONG_DATA.filter(e => e.version_num <= 18 && Object.hasOwn(e, 'lock_types'));
-        songsToCheck.forEach(e => {
-            e.lock_types.forEach((lock_value, difficulty_id) => {
-                if (LOCKED_CHART_TYPES.has(lock_value)) {
-                    toggleSongVisibility(e.song_id, difficulty_id);
-                }
-            });
-        });
+    const text = document.createTextNode(showText);
+    button.appendChild(text);
 
-        /*
-         * Finally, apply the revocation list.
-         */
-        MANUAL_REVOCATION_LIST.forEach(e => {
-            if (e.difficulties) {
-                e.difficulties.forEach(difficulty_id => toggleSongVisibility(e.song_id, difficulty_id));
-            } else {
-                toggleSongVisibility(e.song_id);
-            }
-        });
+    button.onclick = () => {
+        text.data = (text.data == hideText) ? showText : hideText;
+        a3ContentController.toggle();
+    };
 
-        var a3ToggleLink = document.getElementById(a3ToggleId);
-        a3ToggleLink.innerText = hideUnavailableSongs ? showSongsText : hideSongsText;
-        hideUnavailableSongs = !hideUnavailableSongs;
-    }
+    // Install the A3 toggle button under the "What's this list?" link in the top right
+    let link = document.querySelector("#explanation")
+    link.parentNode.insertBefore(button, link.nextSibling);
 
-    function createA3ToggleButton() {
-        const toggleA3Button = document.createElement('div');
-        const toggleA3ButtonNode = document.createTextNode(hideUnavailableSongs ? showSongsText : hideSongsText);
-        toggleA3Button.setAttribute('class', 'div-options-btn')
-        toggleA3Button.setAttribute('id', a3ToggleId)
-        toggleA3Button.onclick = () => toggleAllSongVisibility();
-        toggleA3Button.appendChild(toggleA3ButtonNode);
-        var link = document.querySelector("#explanation")
-        link.parentNode.insertBefore(toggleA3Button, link.nextSibling);
-    }
-
-    createA3ToggleButton();
-    toggleAllSongVisibility();
-
-    // always hide the 'Insufficient Data' row for cleanliness - iirc A20 PLUS songs are all ranked
+    // always hide the 'Insufficient Data' row for cleanliness - iirc, A20 PLUS songs are all ranked
     $("#no-rating-row").hide();
 })();
