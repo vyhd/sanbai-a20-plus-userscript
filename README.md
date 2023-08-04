@@ -16,6 +16,9 @@ Contributions are welcome! I don't have grand ambitions with this script, but if
 
 # Changelog
 
+### 2.1.1 (2023/08/04)
+added Golden League A3 chart revocations for Draw the Savage and (tentatively) Going Hypersonic/MUTEKI BUFFALO
+
 ### 2.1.0 (2023/07/16)
 added button to enable toggling A3 content on demand (contributed by [@robert-vo](https://github.com/robert-vo) - thanks!)
 
