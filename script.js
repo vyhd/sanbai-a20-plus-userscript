@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         3icecream difficulty_list - only MDX:U songs
 // @namespace    https://vyhd.dev
-// @version      2.1.0
+// @version      2.1.1
 // @description  Removes songs from 3icecream's tier lists that are unavailable on MDX:U (A20 PLUS, white) cabs.
 // @license      CC0-1.0; https://creativecommons.org/publicdomain/zero/1.0/
 // @author       vyhd@vyhd.dev
@@ -28,24 +28,27 @@ const CSP_AND_CDP = [4,8]; // many songs have A3 challenge charts we want to hid
 // (get a song's ID by name via: `ALL_SONG_DATA.filter(e => e.song_name === "foo").map(e => e.song_id)`
 const MANUAL_REVOCATION_LIST = [
     // GOLDEN LEAGUE A3 Challenge charts
-    {song_id: "l61ldlPo1DQ081860O86D0Qo0qdOd0qP", difficulties: CSP_AND_CDP }, // Ace out
-    {song_id: "6d8DiDl0i1oldbbo0o60PQ0q96d608Dq", difficulties: CSP_AND_CDP }, // ALPACORE
-    {song_id: "9DoD10OPQ999IlP0doo69olbOQ680q09", difficulties: CSP_AND_CDP }, // Avenger
-    {song_id: "1qPIiqqQo0P9dD90I11q90b0ooIidbPO", difficulties: CSP_AND_CDP }, // CyberConnect
-    {song_id: "dqQbQ9oPlIi6bDdi18d9qPlDb0PiDddi", difficulties: CSP_AND_CDP }, // DIGITALIZER
-    {song_id: "d9llb88lDI1q0QI10P01lqIqlI6QO0Dl", difficulties: CSP_AND_CDP }, // Give Me
-    {song_id: "9IdoP1ld9098PI90QQ6bP0Idl1ibo80D", difficulties: CSP_AND_CDP }, // Glitch Angel
-    {song_id: "dIdDQD1Q8oPQ90Q1DPbiQI661qD9oi6I", difficulties: CSP_AND_CDP }, // Golden Arrow
-    {song_id: "DdIo9DQ0ddDld99DQdiiqbPP06OI91I0", difficulties: CSP_AND_CDP }, // New Era
-    {song_id: "Ol8PPooqO8iOqQ6900o0q0QI9dPo0O0b", difficulties: CSP_AND_CDP }, // Rampage Hero
-    {song_id: "bbiPqbo0lQq9P19i06q690blI91dbbq6", difficulties: CSP_AND_CDP }, // Starlight in the Snow
-    {song_id: "b80qOO6l8060990qQPod1bOd8Q9d69qo", difficulties: CSP_AND_CDP }, // The World Ends Now
+    {song_id: "l61ldlPo1DQ081860O86D0Qo0qdOd0qP", difficulties: CSP_AND_CDP}, // Ace out
+    {song_id: "6d8DiDl0i1oldbbo0o60PQ0q96d608Dq", difficulties: CSP_AND_CDP}, // ALPACORE
+    {song_id: "9DoD10OPQ999IlP0doo69olbOQ680q09", difficulties: CSP_AND_CDP}, // Avenger
+    {song_id: "1qPIiqqQo0P9dD90I11q90b0ooIidbPO", difficulties: CSP_AND_CDP}, // CyberConnect
+    {song_id: "dqQbQ9oPlIi6bDdi18d9qPlDb0PiDddi", difficulties: CSP_AND_CDP}, // DIGITALIZER
+    {song_id: "D6ll81qoDDPIq0d89O69dIQIldQdQoId", difficulties: CSP_AND_CDP}, // Draw the Savage
+    {song_id: "d9llb88lDI1q0QI10P01lqIqlI6QO0Dl", difficulties: CSP_AND_CDP}, // Give Me
+    {song_id: "9IdoP1ld9098PI90QQ6bP0Idl1ibo80D", difficulties: CSP_AND_CDP}, // Glitch Angel
+    {song_id: "6Obi001oi9Qd1966dOd6d6Qo66dbbill", difficulties: CSP_AND_CDP}, // Going Hypersonic
+    {song_id: "dIdDQD1Q8oPQ90Q1DPbiQI661qD9oi6I", difficulties: CSP_AND_CDP}, // Golden Arrow
+    {song_id: "d10d86DQqqd6QDlQlOI1bQi9do66l8Od", difficulties: CSP_AND_CDP}, // MUTEKI BUFFALO
+    {song_id: "DdIo9DQ0ddDld99DQdiiqbPP06OI91I0", difficulties: CSP_AND_CDP}, // New Era
+    {song_id: "Ol8PPooqO8iOqQ6900o0q0QI9dPo0O0b", difficulties: CSP_AND_CDP}, // Rampage Hero
+    {song_id: "bbiPqbo0lQq9P19i06q690blI91dbbq6", difficulties: CSP_AND_CDP}, // Starlight in the Snow
+    {song_id: "b80qOO6l8060990qQPod1bOd8Q9d69qo", difficulties: CSP_AND_CDP}, // The World Ends Now
 
     // other A3 Challenge charts
-    {song_id: "o9P816l0QQ1b9l1l6i1o6OD9bl9dP00l", difficulties: CSP_AND_CDP }, // BITTER CHOCOLATE STRIKER
-    {song_id: "o1d0DDobPPPlq0l8Qli1d6ODI8ldo1qb", difficulties: CSP_AND_CDP }, // シル・ヴ・プレジデント
-    {song_id: "6dO6i9qq601D8ild9QIlbO8bodbiQ1Pl", difficulties: CSP_AND_CDP }, // 灼熱Beach Side Bunny
-    {song_id: "PIP1OIoObQ11Q0Po6idiloqOl9OQqqdd", difficulties: CSP_AND_CDP }, // なだめスかし Negotiation
+    {song_id: "o9P816l0QQ1b9l1l6i1o6OD9bl9dP00l", difficulties: CSP_AND_CDP}, // BITTER CHOCOLATE STRIKER
+    {song_id: "o1d0DDobPPPlq0l8Qli1d6ODI8ldo1qb", difficulties: CSP_AND_CDP}, // シル・ヴ・プレジデント
+    {song_id: "6dO6i9qq601D8ild9QIlbO8bodbiQ1Pl", difficulties: CSP_AND_CDP}, // 灼熱Beach Side Bunny
+    {song_id: "PIP1OIoObQ11Q0Po6idiloqOl9OQqqdd", difficulties: CSP_AND_CDP}, // なだめスかし Negotiation
 
     // A20 gold cab exclusive songs
     {song_id: "6dQQd1d1OQlqQdQ98i01DQ1i9P6QDQdQ"}, // BUTTERFLY (20th Anniversary Mix)
