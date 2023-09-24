@@ -46,9 +46,7 @@ const MANUAL_REVOCATION_LIST = [
 
     // other A3 Challenge charts
     {song_id: "o9P816l0QQ1b9l1l6i1o6OD9bl9dP00l", difficulties: CSP_AND_CDP}, // BITTER CHOCOLATE STRIKER
-    {song_id: "o1d0DDobPPPlq0l8Qli1d6ODI8ldo1qb", difficulties: CSP_AND_CDP}, // シル・ヴ・プレジデント
     {song_id: "6dO6i9qq601D8ild9QIlbO8bodbiQ1Pl", difficulties: CSP_AND_CDP}, // 灼熱Beach Side Bunny
-    {song_id: "PIP1OIoObQ11Q0Po6idiloqOl9OQqqdd", difficulties: CSP_AND_CDP}, // なだめスかし Negotiation
 
     // A20 gold cab exclusive songs
     {song_id: "6dQQd1d1OQlqQdQ98i01DQ1i9P6QDQdQ"}, // BUTTERFLY (20th Anniversary Mix)
