@@ -16,6 +16,9 @@ Contributions are welcome! I don't have grand ambitions with this script, but if
 
 # Changelog
 
+### 2.1.2 (2023/09/28)
+correctly remove challenge charts for シル・ヴ・プレジデント and なだめスかし Negotiation (contributed by [@aanguyen](https://github.com/aanguyen) - thanks!)
+
 ### 2.1.1 (2023/08/04)
 added Golden League A3 chart revocations for Draw the Savage and (tentatively) Going Hypersonic/MUTEKI BUFFALO
 
