@@ -113,8 +113,8 @@ class A3ContentController {
 
         this.elementsToToggle = new Array();
 
-        // Manually include the "Insufficient Data" row: all A20 PLUS content is ranked, so don't render an empty row
-        this.elementsToToggle.push($("#no-rating-row"));
+        // Manually include the "Insufficient Data" row (if it exists): all A20 PLUS content is ranked, so don't render it
+        this.elementsToToggle.push($("#no-rating-row").get());
 
         // ALL_SONG_DATA contains an array of song data structured like {song_id, song_name, version_num}, etc:
         // Find all the song jackets that map to DDR A3 (version_num === 19) for toggling.
