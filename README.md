@@ -16,6 +16,9 @@ Contributions are welcome! I don't have grand ambitions with this script, but if
 
 # Changelog
 
+### 2.1.3 (2023/11/18)
+fix a rare edge case where we would error out if all song jackets are ranked (i.e., none are filed under 'Insufficient Data')
+
 ### 2.1.2 (2023/09/28)
 correctly remove challenge charts for シル・ヴ・プレジデント and なだめスかし Negotiation (contributed by [@aanguyen](https://github.com/aanguyen) - thanks!)
 
